@@ -4,6 +4,7 @@ import 'package:bolsista_tabuleiro_project/modules/login/domain/repositories/log
 import 'package:bolsista_tabuleiro_project/modules/login/domain/usecases/login_usecase.dart';
 import 'package:bolsista_tabuleiro_project/modules/login/external/dio/login_dio_datasource_imp.dart';
 import 'package:bolsista_tabuleiro_project/modules/login/infra/datasources/login_datasource.dart';
+import 'package:bolsista_tabuleiro_project/modules/login/presenter/cubit/login_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -16,9 +17,7 @@ import '../../modules/login/infra/repositories/login_repository_imp.dart';
 GetIt inject = GetIt.I;
 
 class Inject {
-  static void init() {
-    // GetIt.I.registerSingletonAsync<SharedPreferences>(
-    //     () => SharedPreferences.getInstance());
+  static void init() async {
     GetIt.I.registerFactory<Dio>(() => Dio());
 
     GetIt.I.registerLazySingleton<LoginDataSource>(
@@ -38,7 +37,7 @@ class Inject {
     GetIt.I.registerFactory<GetGameDetailsUseCase>(
         () => GetGameDetailsUseCaseImp(inject()));
 
-    GetIt.I
-        .registerLazySingleton<HomeCubit>(() => HomeCubit(inject(), inject()));
+    GetIt.I.registerFactory<HomeCubit>(() => HomeCubit(inject(), inject()));
+    GetIt.I.registerLazySingleton<LoginCubit>(() => LoginCubit(inject()));
   }
 }

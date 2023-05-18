@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 class GameCard extends StatelessWidget {
   final GameModel gameModel;
+  final Function() onTap;
   const GameCard({
     super.key,
     required this.gameModel,
+    required this.onTap,
   });
 
   @override
@@ -28,44 +30,47 @@ class GameCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-            ),
-            child: CachedNetworkImage(
-              imageUrl: gameModel.image,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-              errorWidget: (context, url, error) => const Icon(
-                Icons.error,
-                color: Colors.red,
+      child: InkWell(
+        onTap: onTap,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(10),
+                bottomLeft: Radius.circular(10),
+              ),
+              child: CachedNetworkImage(
+                imageUrl: gameModel.image,
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) => const Icon(
+                  Icons.error,
+                  color: Colors.red,
+                ),
               ),
             ),
-          ),
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  gameModel.name,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            Expanded(
+                child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    gameModel.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Text(gameModel.year.toString(),
-                    style: const TextStyle(fontSize: 12)),
-              ],
-            ),
-          ))
-        ],
+                  Text(gameModel.year.toString(),
+                      style: const TextStyle(fontSize: 12)),
+                ],
+              ),
+            ))
+          ],
+        ),
       ),
     );
   }

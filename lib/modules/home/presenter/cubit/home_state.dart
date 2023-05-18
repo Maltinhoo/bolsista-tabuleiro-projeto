@@ -26,3 +26,5 @@ class HomeError extends HomeState {
 
   const HomeError(this.message);
 }
+
+class HomeLogout extends HomeState {}

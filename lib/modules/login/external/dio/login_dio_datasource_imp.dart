@@ -22,6 +22,7 @@ class LoginDioDataSourceImp implements LoginDataSource {
         },
       );
       prefs.setString('token', response.data);
+      prefs.setBool('isLogged', true);
       return response.data;
     } on DioError catch (e) {
       throw Exception(e.message);

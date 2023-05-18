@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:bolsista_tabuleiro_project/modules/game/domain/usecases/get_games_list_usecase.dart';
-import 'package:bolsista_tabuleiro_project/modules/login/domain/entities/user_entity.dart';
 import 'package:bolsista_tabuleiro_project/modules/login/domain/usecases/login_usecase.dart';
 import 'package:equatable/equatable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../game/domain/entities/game_entity.dart';
 
@@ -18,7 +18,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> getGamesList() async {
     emit(HomeLoading());
-    await login();
+    // await login();
     final result = await getGamesListUseCase(1);
     result.fold((l) => emit(HomeError(l.toString())), (r) {
       gamesList = r;
@@ -40,8 +40,10 @@ class HomeCubit extends Cubit<HomeState> {
     });
   }
 
-  Future<void> login() async {
-    await loginUseCase(
-        UserEntity(email: 'candidato@tabulero.com.br', password: '123456'));
+  Future<void> logout() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    emit(HomeLoading());
+    await sharedPreferences.clear();
+    emit(HomeLogout());
   }
 }
