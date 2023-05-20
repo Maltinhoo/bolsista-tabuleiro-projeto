@@ -32,19 +32,22 @@ class GameCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(5),
-                bottomLeft: Radius.circular(5),
-              ),
-              child: CachedNetworkImage(
-                imageUrl: gameModel.image,
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
-                errorWidget: (context, url, error) => const Icon(
-                  Icons.error,
-                  color: Colors.red,
+            Hero(
+              tag: gameModel.id,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  bottomLeft: Radius.circular(5),
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: gameModel.image,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                  ),
                 ),
               ),
             ),

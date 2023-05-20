@@ -17,13 +17,16 @@ class InfoGame extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-          child: CachedNetworkImage(
-            imageUrl: game.image,
-            width: 130,
-            height: 170,
-            fit: BoxFit.cover,
+        Hero(
+          tag: game.id,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(5)),
+            child: CachedNetworkImage(
+              imageUrl: game.image,
+              width: 130,
+              height: 170,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         const SizedBox(width: 15),
