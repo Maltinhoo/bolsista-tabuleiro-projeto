@@ -17,16 +17,13 @@ class GameCard extends StatelessWidget {
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(
-          color: Colors.grey,
-        ),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(.5),
+            color: Colors.black.withOpacity(.3),
             spreadRadius: 1,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
+            blurRadius: 5,
+            offset: const Offset(0, 5),
           ),
         ],
       ),
@@ -37,8 +34,8 @@ class GameCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10),
-                bottomLeft: Radius.circular(10),
+                topLeft: Radius.circular(5),
+                bottomLeft: Radius.circular(5),
               ),
               child: CachedNetworkImage(
                 imageUrl: gameModel.image,

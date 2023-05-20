@@ -7,21 +7,28 @@ import 'package:bolsista_tabuleiro_project/modules/login/infra/datasources/login
 import 'package:bolsista_tabuleiro_project/modules/login/presenter/cubit/login_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../modules/game/domain/repositories/game_repository.dart';
 import '../../modules/game/domain/usecases/get_games_list_usecase.dart';
 import '../../modules/game/infra/datasources/get_game_list_datasource.dart';
 import '../../modules/game/infra/repositories/game_repository_imp.dart';
 import '../../modules/login/infra/repositories/login_repository_imp.dart';
+import '../../modules/preferences/preferences_helper.dart';
+import '../../modules/preferences/shared_preferences_helper.dart';
 
 GetIt inject = GetIt.I;
 
 class Inject {
   static void init() async {
+    final sharedPreferences = await SharedPreferences.getInstance();
+    GetIt.I.registerLazySingleton<IPreferencesHelper>(
+        () => SharedPreferencesHelper(sharedPreferences));
+
     GetIt.I.registerFactory<Dio>(() => Dio());
 
     GetIt.I.registerLazySingleton<LoginDataSource>(
-        () => LoginDioDataSourceImp(inject()));
+        () => LoginDioDataSourceImp(inject(), inject()));
     GetIt.I.registerLazySingleton<GameDataSource>(
         () => GameDioDataSourceImp(inject()));
 

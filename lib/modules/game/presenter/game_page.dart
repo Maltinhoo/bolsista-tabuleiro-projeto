@@ -1,5 +1,7 @@
 import 'package:bolsista_tabuleiro_project/modules/game/infra/models/game_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:bolsista_tabuleiro_project/modules/game/presenter/widgets/game_is_expansion.dart';
+import 'package:bolsista_tabuleiro_project/modules/game/presenter/widgets/info_game.dart';
+import 'package:bolsista_tabuleiro_project/modules/game/presenter/widgets/minumum_age.dart';
 import 'package:flutter/material.dart';
 
 import '../../../shared/widgets/common_app_bar.dart';
@@ -19,27 +21,82 @@ class GamePage extends StatelessWidget {
             onLogout: onLogout,
           )),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                CachedNetworkImage(
-                  imageUrl: game.image,
-                  width: 150,
-                  height: 200,
-                  fit: BoxFit.cover,
+        padding: const EdgeInsets.symmetric(vertical: 15),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              InfoGame(game: game),
+              const SizedBox(height: 15),
+              MinimumAge(minAge: game.minAge),
+              const SizedBox(height: 15),
+              const Text(
+                'Descrição do jogo',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(game.name),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ],
+              ),
+              Text(
+                game.description,
+                style: const TextStyle(
+                  fontSize: 18,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 15),
+              const Text(
+                'Mecanicas',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                game.characteristics
+                    .where((element) => element.type != 'DEPENDENCIA_IDIOMA')
+                    .map((e) => e.description)
+                    .join(', '),
+                style: const TextStyle(
+                  fontSize: 18,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 15),
+              const Text(
+                'Artistas',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                game.artists.map((e) => e.name).join(', '),
+                style: const TextStyle(
+                  fontSize: 18,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 15),
+              const Text(
+                'Editoras',
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                game.designers.map((e) => e.name).join(', '),
+                style: const TextStyle(
+                  fontSize: 18,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 15),
+              if (game.isExpansion) const GameIsExpansion()
+            ],
+          ),
         ),
       ),
     );

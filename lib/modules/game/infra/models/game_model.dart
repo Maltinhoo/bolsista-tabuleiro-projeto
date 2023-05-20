@@ -37,7 +37,7 @@ class GameModel extends GameEntity {
       dateRegister: DateTime.parse(map['dataCadastro']),
       isRPG: map['rpg'],
       name: map['nome'],
-      description: map['descricao'],
+      description: map['descricao'].toString().replaceAll('&#10;', ''),
       minPlayers: map['minimoJogadores'],
       maxPlayers: map['maximoJogadores'],
       minAge: map['idadeMinima'],
