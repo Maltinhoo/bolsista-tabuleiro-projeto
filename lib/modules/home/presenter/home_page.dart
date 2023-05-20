@@ -19,11 +19,17 @@ class HomePage extends StatelessWidget {
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(kToolbarHeight),
             child: CommonAppBar(
-              onLogout: () => inject<HomeCubit>().logout(),
+              onLogout: () {
+                inject<HomeCubit>().logout();
+                Navigator.pop(context);
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (_) => const LoginPage()));
+              },
             )),
         body: BlocProvider(
           create: (context) => inject<HomeCubit>()..getGamesList(),
           child: BlocListener<HomeCubit, HomeState>(
+            bloc: inject<HomeCubit>(),
             listener: (context, state) {
               if (state is HomeLogout) {
                 Navigator.pushReplacement(context,
@@ -47,12 +53,12 @@ class HomePage extends StatelessWidget {
                               onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => GamePage(
+                                      builder: (context) => GamePage(
                                             game: e,
-                                            onLogout: () =>
-                                                BlocProvider.of<HomeCubit>(
-                                                        context)
-                                                    .logout(),
+                                            onLogout: () {
+                                              inject<HomeCubit>().logout();
+                                              Navigator.pop(context);
+                                            },
                                           ))),
                             )),
                         if (state is! HomeLoadingMore &&

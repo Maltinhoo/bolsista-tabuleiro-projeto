@@ -5,6 +5,7 @@ import 'package:bolsista_tabuleiro_project/modules/game/presenter/widgets/minumu
 import 'package:flutter/material.dart';
 
 import '../../../shared/widgets/common_app_bar.dart';
+import '../../login/presenter/login_page.dart';
 
 class GamePage extends StatelessWidget {
   final GameModel game;
@@ -18,7 +19,11 @@ class GamePage extends StatelessWidget {
           preferredSize: const Size.fromHeight(kToolbarHeight),
           child: CommonAppBar(
             title: game.name,
-            onLogout: onLogout,
+            onLogout: () {
+              onLogout();
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (_) => const LoginPage()));
+            },
           )),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 15),

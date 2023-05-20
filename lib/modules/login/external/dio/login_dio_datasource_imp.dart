@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:bolsista_tabuleiro_project/modules/login/domain/entities/user_entity.dart';
 import 'package:bolsista_tabuleiro_project/modules/login/infra/datasources/login_datasource.dart';
 import 'package:bolsista_tabuleiro_project/modules/preferences/preferences_helper.dart';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginDioDataSourceImp implements LoginDataSource {
   final Dio dio;
@@ -14,8 +15,6 @@ class LoginDioDataSourceImp implements LoginDataSource {
   );
   @override
   Future<String> login(UserEntity user) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
     try {
       final response = await dio.post(
         'http://206.189.206.44:8080/login',
@@ -24,11 +23,16 @@ class LoginDioDataSourceImp implements LoginDataSource {
           'senha': user.password,
         },
       );
-      prefs.setString('token', response.data);
-      prefs.setBool('isLogged', true);
-      return response.data;
+      final token = response.data;
+      await preferencesHelper.setToken(token);
+      await preferencesHelper.setIsLogged();
+      return token;
     } on DioError catch (e) {
-      throw Exception(e.message);
+      if (e.response?.statusCode == HttpStatus.unauthorized) {
+        throw Exception('Usuário ou senha inválidos');
+      } else {
+        throw Exception('Erro ao realizar login');
+      }
     }
   }
 }

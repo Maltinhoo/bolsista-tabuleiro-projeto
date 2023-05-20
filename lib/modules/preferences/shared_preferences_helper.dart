@@ -25,4 +25,9 @@ class SharedPreferencesHelper implements IPreferencesHelper {
   Future<void> setToken(String token) async {
     await sharedPreferences.setString('token', token);
   }
+
+  @override
+  Future<void> clear() async {
+    await sharedPreferences.clear();
+  }
 }

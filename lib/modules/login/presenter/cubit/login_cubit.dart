@@ -12,12 +12,14 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this.loginUseCase) : super(LoginInitial());
 
   Future<void> login(String email, String password) async {
-    emit(LoginLoading());
-    final result =
-        await loginUseCase(UserEntity(email: email, password: password));
-
-    result.fold(
-        (l) => emit(LoginError(l.toString())), (r) => emit(LoginSuccess()));
+    try {
+      emit(LoginLoading());
+      final token =
+          await loginUseCase(UserEntity(email: email, password: password));
+      emit(LoginSuccess());
+    } catch (e) {
+      emit(LoginError(e.toString()));
+    }
   }
 
   Future<void> initialize() async {

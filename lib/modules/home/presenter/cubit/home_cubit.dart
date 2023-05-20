@@ -1,10 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:bolsista_tabuleiro_project/core/inject/inject.dart';
 import 'package:bolsista_tabuleiro_project/modules/game/domain/usecases/get_games_list_usecase.dart';
 import 'package:bolsista_tabuleiro_project/modules/login/domain/usecases/login_usecase.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../game/domain/entities/game_entity.dart';
+import '../../../preferences/preferences_helper.dart';
 
 part 'home_state.dart';
 
@@ -41,9 +42,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> logout() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     emit(HomeLoading());
-    await sharedPreferences.clear();
+    inject<IPreferencesHelper>().clear();
     emit(HomeLogout());
   }
 }

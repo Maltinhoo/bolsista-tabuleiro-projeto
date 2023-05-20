@@ -3,4 +3,6 @@ abstract class IPreferencesHelper {
   Future<bool> getIsLogged();
   Future<void> setToken(String token);
   Future<String> getToken();
+
+  Future<void> clear();
 }

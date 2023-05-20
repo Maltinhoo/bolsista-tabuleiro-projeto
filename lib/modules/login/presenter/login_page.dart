@@ -17,6 +17,8 @@ class _LoginPageState extends State<LoginPage> {
   String email = '';
   String password = '';
 
+  bool _obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -46,66 +48,93 @@ class _LoginPageState extends State<LoginPage> {
                 );
               }
               return Scaffold(
+                  backgroundColor: const Color(0xff5E115B),
                   body: Form(
-                key: _formKey,
-                child: Center(
-                  child: Container(
-                      padding: const EdgeInsets.all(20),
-                      width: MediaQuery.of(context).size.width * .7,
-                      height: MediaQuery.of(context).size.height * .35,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(.2),
-                              blurRadius: 10,
-                              offset: const Offset(0, 5))
+                    key: _formKey,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/images/tabulero.png'),
+                          const SizedBox(height: 50),
+                          Container(
+                              padding: const EdgeInsets.all(20),
+                              width: MediaQuery.of(context).size.width * .7,
+                              height: MediaQuery.of(context).size.height * .35,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(.3),
+                                      blurRadius: 10,
+                                      offset: const Offset(0, 5))
+                                ],
+                              ),
+                              child: Column(
+                                children: [
+                                  TextFormField(
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      labelText: 'Email',
+                                    ),
+                                    keyboardType: TextInputType.emailAddress,
+                                    validator: (value) => value?.isEmpty ?? true
+                                        ? 'Por favor, digite seu email'
+                                        : null,
+                                    onChanged: (value) {
+                                      email = value;
+                                    },
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                          obscureText: _obscureText,
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            labelText: 'Senha',
+                                          ),
+                                          keyboardType:
+                                              TextInputType.visiblePassword,
+                                          validator: (value) => value
+                                                      ?.isEmpty ??
+                                                  true
+                                              ? 'Por favor, digite sua senha'
+                                              : null,
+                                          onChanged: (value) {
+                                            password = value;
+                                          },
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _obscureText = !_obscureText;
+                                          });
+                                        },
+                                        icon: Icon(_obscureText
+                                            ? Icons.visibility
+                                            : Icons.visibility_off),
+                                      )
+                                    ],
+                                  ),
+                                  const Expanded(child: SizedBox()),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        BlocProvider.of<LoginCubit>(context)
+                                            .login(email, password);
+                                      }
+                                    },
+                                    child: const Text('Entrar'),
+                                  )
+                                ],
+                              )),
                         ],
                       ),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              labelText: 'Email',
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (value) => value?.isEmpty ?? true
-                                ? 'Por favor, digite seu email'
-                                : null,
-                            onChanged: (value) {
-                              email = value;
-                            },
-                          ),
-                          TextFormField(
-                            obscureText: true,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              labelText: 'Senha',
-                            ),
-                            keyboardType: TextInputType.visiblePassword,
-                            validator: (value) => value?.isEmpty ?? true
-                                ? 'Por favor, digite sua senha'
-                                : null,
-                            onChanged: (value) {
-                              password = value;
-                            },
-                          ),
-                          const Expanded(child: SizedBox()),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                BlocProvider.of<LoginCubit>(context)
-                                    .login(email, password);
-                              }
-                            },
-                            child: const Text('Entrar'),
-                          )
-                        ],
-                      )),
-                ),
-              ));
+                    ),
+                  ));
             },
           ),
         ),
