@@ -17,10 +17,12 @@ class HomeCubit extends Cubit<HomeState> {
   List<GameEntity> gamesList = [];
   bool isLastPage = false;
 
+  int currentPage = 1;
+
   Future<void> getGamesList() async {
     emit(HomeLoading());
     // await login();
-    final result = await getGamesListUseCase(1);
+    final result = await getGamesListUseCase(currentPage);
     result.fold((l) => emit(HomeError(l.toString())), (r) {
       gamesList = r;
       emit(HomeSuccess(gamesList));
@@ -30,8 +32,12 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> loadMoreGames() async {
     if (isLastPage) return;
     emit(HomeLoadingMore(gamesList));
-    final result = await getGamesListUseCase(gamesList.length ~/ 10 + 1);
-    result.fold((l) => emit(HomeError(l.toString())), (r) {
+    final result = await getGamesListUseCase(++currentPage);
+    print(currentPage);
+    result.fold((l) {
+      currentPage--;
+      emit(HomeError(l.toString()));
+    }, (r) {
       if (r.isEmpty || r.length < 10) {
         isLastPage = true;
       } else {
@@ -39,6 +45,11 @@ class HomeCubit extends Cubit<HomeState> {
       }
       emit(HomeSuccess(gamesList));
     });
+  }
+
+  Future<void> tryAgain() async {
+    emit(HomeLoading());
+    emit(HomeSuccess(gamesList));
   }
 
   Future<void> logout() async {

@@ -110,8 +110,12 @@ class HomePage extends StatelessWidget {
                   );
                 } else if (state is HomeError) {
                   return Center(
-                    child: Text(state.message),
-                  );
+                      child: ElevatedButton(
+                    onPressed: () {
+                      context.read<HomeCubit>().tryAgain();
+                    },
+                    child: const Text('Tentar novamente'),
+                  ));
                 } else {
                   return Container();
                 }
