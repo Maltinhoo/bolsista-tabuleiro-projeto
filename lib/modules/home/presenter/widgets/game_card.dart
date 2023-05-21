@@ -1,5 +1,6 @@
 import 'package:bolsista_tabuleiro_project/modules/game/infra/models/game_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class GameCard extends StatelessWidget {
@@ -14,6 +15,7 @@ class GameCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: kIsWeb ? 300 : null,
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,

@@ -1,5 +1,6 @@
 import 'package:bolsista_tabuleiro_project/core/inject/inject.dart';
 import 'package:bolsista_tabuleiro_project/modules/home/presenter/widgets/game_card.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,37 +44,68 @@ class HomePage extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   );
                 } else if (state is HomeSuccess) {
-                  return SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Column(
-                      children: [
-                        ...state.games.map((e) => GameCard(
-                              gameModel: e as GameModel,
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => GamePage(
-                                            game: e,
-                                            onLogout: () {
-                                              inject<HomeCubit>().logout();
-                                              Navigator.pop(context);
-                                            },
-                                          ))),
-                            )),
-                        if (state is! HomeLoadingMore &&
-                            !context.read<HomeCubit>().isLastPage)
-                          ElevatedButton(
-                            onPressed: () {
-                              context.read<HomeCubit>().loadMoreGames();
-                            },
-                            child: const Text('Carregar mais'),
-                          ),
-                        if (state is HomeLoadingMore)
-                          const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                      ],
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(scrollbars: false),
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Column(
+                          children: [
+                            if (kIsWeb)
+                              Wrap(
+                                alignment: WrapAlignment.start,
+                                children: [
+                                  ...state.games.map((e) => GameCard(
+                                        gameModel: e as GameModel,
+                                        onTap: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => GamePage(
+                                                      game: e,
+                                                      onLogout: () {
+                                                        inject<HomeCubit>()
+                                                            .logout();
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ))),
+                                      )),
+                                ],
+                              ),
+                            if (!kIsWeb)
+                              ...state.games.map((e) => GameCard(
+                                    gameModel: e as GameModel,
+                                    onTap: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => GamePage(
+                                                  game: e,
+                                                  onLogout: () {
+                                                    inject<HomeCubit>()
+                                                        .logout();
+                                                    Navigator.pop(context);
+                                                  },
+                                                ))),
+                                  )),
+                            const SizedBox(height: 10),
+                            if (state is! HomeLoadingMore &&
+                                !context.read<HomeCubit>().isLastPage)
+                              ElevatedButton(
+                                onPressed: () {
+                                  context.read<HomeCubit>().loadMoreGames();
+                                },
+                                child: const Text('Carregar mais'),
+                              ),
+                            if (state is HomeLoadingMore)
+                              const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 } else if (state is HomeError) {

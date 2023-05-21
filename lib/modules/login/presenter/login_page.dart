@@ -1,5 +1,6 @@
 import 'package:bolsista_tabuleiro_project/core/inject/inject.dart';
 import 'package:bolsista_tabuleiro_project/modules/login/presenter/cubit/login_cubit.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -59,8 +60,14 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(height: 50),
                           Container(
                               padding: const EdgeInsets.all(20),
-                              width: MediaQuery.of(context).size.width * .7,
-                              height: MediaQuery.of(context).size.height * .35,
+                              width: kIsWeb
+                                  // ? MediaQuery.of(context).size.width * .2
+                                  ? 300
+                                  : MediaQuery.of(context).size.width * .7,
+                              height: kIsWeb
+                                  // ? MediaQuery.of(context).size.height * .3
+                                  ? 230
+                                  : MediaQuery.of(context).size.height * .35,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(10),
